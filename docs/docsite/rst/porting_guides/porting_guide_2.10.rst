@@ -78,6 +78,7 @@ The following functionality will change in Ansible 2.14. Please update update yo
 * The :ref:`docker_container <docker_container_module>` module's ``network_mode`` option will be set by default to the name of the first network in ``networks`` if at least one network is given and ``networks_cli_compatible`` is ``true`` (will be default from Ansible 2.12 on). Set to an explicit value to avoid deprecation warnings if you specify networks and set ``networks_cli_compatible`` to ``true``. The current default (not specifying it) is equivalent to the value ``default``.
 * :ref:`iam_policy <iam_policy_module>`: the default value for the ``skip_duplicates`` option will change from ``true`` to ``false``.  To maintain the existing behavior explicitly set it to ``true``.
 * :ref:`iam_role <iam_role_module>`: the ``purge_policies`` option (also know as ``purge_policy``) default value will change from ``true`` to ``false``
+* :ref:`elb_network_lb <elb_network_lb_module>`: the default behaviour for the ``state`` option will change from ``absent`` to ``present``.  To maintain the existing behavior explicitly set state to ``absent``.
 
 
 The following modules will be removed in Ansible 2.14. Please update your playbooks accordingly.
@@ -98,6 +99,10 @@ Noteworthy module changes
 * :ref:`zabbix_action <zabbix_action_module>` no longer requires ``esc_period`` and ``event_source`` arguments when ``state=absent``.
 * :ref:`gitlab_user <gitlab_user_module>` no longer requires ``name``, ``email`` and ``password`` arguments when ``state=absent``.
 * :ref:`win_pester <win_pester_module>` no longer runs all ``*.ps1`` file in the directory specified due to it executing potentially unknown scripts. It will follow the default behaviour of only running tests for files that are like ``*.tests.ps1`` which is built into Pester itself
+* :ref:`win_find <win_find_module>` has been refactored to better match the behaviour of the ``find`` module. Here is what has changed:
+    * When the directory specified by ``paths`` does not exist or is a file, it will no longer fail and will just warn the user
+    * Junction points are no longer reported as ``islnk``, use ``isjunction`` to properly report these files. This behaviour matches the :ref:`win_stat <win_stat_module>`
+    * Directories no longer return a ``size``, this matches the ``stat`` and ``find`` behaviour and has been removed due to the difficulties in correctly reporting the size of a directory
 
 Plugins
 =======
